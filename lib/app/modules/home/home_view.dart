@@ -97,10 +97,9 @@ class HomeView extends GetView<ProductController> {
           onRefresh: () async {
             await controller.refreshProducts();
           },
-          child: ListView.separated(
+          child: ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: controller.products.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
               final product = controller.products[index];
               return ProductCard(

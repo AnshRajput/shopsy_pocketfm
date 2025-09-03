@@ -20,11 +20,9 @@ class CartView extends GetView<CartController> {
           children: [
             // Cart Items List with optimized rendering
             Expanded(
-              child: ListView.separated(
+              child: ListView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: controller.cartItems.length,
-                separatorBuilder:
-                    (context, index) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final cartItem = controller.cartItems[index];
                   return CartItemCard(
