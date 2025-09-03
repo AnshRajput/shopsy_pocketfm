@@ -1,0 +1,35 @@
+[
+    {
+        "id": 1,
+        "name": "Premium Wireless Headphones",
+        "description": "High-quality wireless headphones with noise cancellation, perfect for music lovers and professionals. Features include 30-hour battery life, premium sound quality, and comfortable over-ear design.",
+        "price": 2499.99,
+        "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+        "category": "Electronics",
+        "rating": 4.8,
+        "reviews": 1247,
+        "inStock": true
+    },
+    {
+        "id": 2,
+        "name": "Organic Cotton T-Shirt",
+        "description": "Comfortable and eco-friendly t-shirt made from 100% organic cotton. Available in multiple colors, this t-shirt is perfect for everyday wear and is gentle on sensitive skin.",
+        "price": 899.99,
+        "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
+        "category": "Clothing",
+        "rating": 4.6,
+        "reviews": 892,
+        "inStock": true
+    },
+    {
+        "id": 3,
+        "name": "Smart Fitness Watch",
+        "description": "Advanced fitness tracking watch with heart rate monitoring, GPS, and sleep tracking. Water-resistant design with 7-day battery life and smartphone connectivity for notifications.",
+        "price": 3999.99,
+        "image": "https://images.unsplash.com/photo-1544117519-31a4b719223d?w=400&h=400&fit=crop",
+        "category": "Electronics",
+        "rating": 4.7,
+        "reviews": 2156,
+        "inStock": true
+    }
+]
