@@ -10,6 +10,7 @@ class ProductController extends GetxController {
   final _isLoading = false.obs;
   final _error = ''.obs;
   final _isRefreshing = false.obs;
+  final _selectedCategory = ''.obs;
 
   // Computed values
   late final RxInt _totalProducts;
@@ -21,7 +22,8 @@ class ProductController extends GetxController {
   String get error => _error.value;
   bool get isRefreshing => _isRefreshing.value;
   int get totalProducts => _totalProducts.value;
-  bool get hasProducts => _hasProducts.value;
+  bool get hasProducts => _products.isNotEmpty;
+  String get selectedCategory => _selectedCategory.value;
 
   @override
   void onInit() {
@@ -97,96 +99,24 @@ class ProductController extends GetxController {
     }
   }
 
-  Product? getProductById(int id) {
-    try {
-      return _products.firstWhere((product) => product.id == id);
-    } catch (e) {
-      Get.log('Product with ID $id not found', isError: true);
-      return null;
-    }
-  }
-
-  // Search products by name or category
-  List<Product> searchProducts(String query) {
-    if (query.isEmpty) return _products;
-
-    final lowercaseQuery = query.toLowerCase();
-    return _products.where((product) {
-      return product.name.toLowerCase().contains(lowercaseQuery) ||
-          product.category.toLowerCase().contains(lowercaseQuery) ||
-          product.description.toLowerCase().contains(lowercaseQuery);
-    }).toList();
-  }
-
   // Filter products by category
-  List<Product> getProductsByCategory(String category) {
-    if (category.isEmpty) return _products;
+  void filterByCategory(String category) {
+    _selectedCategory.value = category;
+  }
 
-    return _products
-        .where(
-          (product) => product.category.toLowerCase() == category.toLowerCase(),
-        )
-        .toList();
+  // Get filtered products by category
+  List<Product> get filteredProducts {
+    if (_selectedCategory.isNotEmpty) {
+      return _products.where((product) {
+        return product.category.toLowerCase() ==
+            _selectedCategory.toLowerCase();
+      }).toList();
+    }
+    return _products;
   }
 
   // Get unique categories
   List<String> get uniqueCategories {
     return _products.map((product) => product.category).toSet().toList();
   }
-
-  // Get products in price range
-  List<Product> getProductsInPriceRange(double minPrice, double maxPrice) {
-    return _products
-        .where(
-          (product) => product.price >= minPrice && product.price <= maxPrice,
-        )
-        .toList();
-  }
-
-  // Sort products
-  void sortProducts(SortOption sortOption) {
-    switch (sortOption) {
-      case SortOption.nameAsc:
-        _products.sort((a, b) => a.name.compareTo(b.name));
-        break;
-      case SortOption.nameDesc:
-        _products.sort((a, b) => b.name.compareTo(a.name));
-        break;
-      case SortOption.priceAsc:
-        _products.sort((a, b) => a.price.compareTo(b.price));
-        break;
-      case SortOption.priceDesc:
-        _products.sort((a, b) => b.price.compareTo(a.price));
-        break;
-      case SortOption.ratingDesc:
-        _products.sort((a, b) => b.rating.compareTo(a.rating));
-        break;
-    }
-    _products.refresh();
-  }
-
-  // Get product statistics
-  Map<String, dynamic> getProductStats() {
-    if (_products.isEmpty) return {};
-
-    final prices = _products.map((p) => p.price).toList();
-    final ratings = _products.map((p) => p.rating).toList();
-
-    return {
-      'totalProducts': _products.length,
-      'averagePrice': prices.reduce((a, b) => a + b) / prices.length,
-      'minPrice': prices.reduce((a, b) => a < b ? a : b),
-      'maxPrice': prices.reduce((a, b) => a > b ? a : b),
-      'averageRating': ratings.reduce((a, b) => a + b) / ratings.length,
-      'categories': uniqueCategories.length,
-    };
-  }
-
-  @override
-  void onClose() {
-    // Clean up resources
-    super.onClose();
-  }
 }
-
-enum SortOption { nameAsc, nameDesc, priceAsc, priceDesc, ratingDesc }
