@@ -32,32 +32,6 @@ class HomeView extends GetView<ProductController> {
           const SizedBox(width: 8), // Spacing between buttons
           // Cart button with badge
           CartBadge(onPressed: () => Get.toNamed(Routes.cart)),
-          // Storage status indicator
-          Obx(() {
-            final cartController = CartController.to;
-            if (cartController.isStorageInitialized) {
-              return Container(
-                margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.green.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.storage, size: 16, color: Colors.green[700]),
-              );
-            } else {
-              return Container(
-                margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.orange.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.storage, size: 16, color: Colors.orange[700]),
-              );
-            }
-          }),
-          const SizedBox(width: 8), // Right margin
         ],
       ),
       body: Obx(() {

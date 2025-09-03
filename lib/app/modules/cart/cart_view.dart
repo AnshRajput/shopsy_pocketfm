@@ -10,140 +10,7 @@ class CartView extends GetView<CartController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shopping Cart'),
-        actions: [
-          // Storage status indicator
-          Obx(() {
-            final cartController = CartController.to;
-            if (cartController.isStorageInitialized) {
-              return Container(
-                margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.green.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.storage, size: 16, color: Colors.green[700]),
-              );
-            } else {
-              return Container(
-                margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.orange.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.storage, size: 16, color: Colors.orange[700]),
-              );
-            }
-          }),
-          // Cart management menu
-          PopupMenuButton<String>(
-            onSelected: (value) => _handleMenuAction(value, context),
-            itemBuilder:
-                (BuildContext context) => [
-                  // Debug options (only in debug mode)
-                  if (kDebugMode) ...[
-                    const PopupMenuItem(
-                      value: 'force_save',
-                      child: Row(
-                        children: [
-                          Icon(Icons.save),
-                          SizedBox(width: 8),
-                          Text('Force Save Cart'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'force_load',
-                      child: Row(
-                        children: [
-                          Icon(Icons.refresh),
-                          SizedBox(width: 8),
-                          Text('Force Load Cart'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'refresh_cart',
-                      child: Row(
-                        children: [
-                          Icon(Icons.sync),
-                          SizedBox(width: 8),
-                          Text('Refresh Cart'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'storage_status',
-                      child: Row(
-                        children: [
-                          Icon(Icons.info),
-                          SizedBox(width: 8),
-                          Text('Storage Status'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'test_persistence',
-                      child: Row(
-                        children: [
-                          Icon(Icons.science),
-                          SizedBox(width: 8),
-                          Text('Test Persistence'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(value: 'divider1', child: Divider()),
-                  ],
-                  if (controller.cartItems.isNotEmpty) ...[
-                    const PopupMenuItem(
-                      value: 'export',
-                      child: Row(
-                        children: [
-                          Icon(Icons.download),
-                          SizedBox(width: 8),
-                          Text('Export Cart'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'import',
-                      child: Row(
-                        children: [
-                          Icon(Icons.upload),
-                          SizedBox(width: 8),
-                          Text('Import Cart'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'clear',
-                      child: Row(
-                        children: [
-                          Icon(Icons.clear_all),
-                          SizedBox(width: 8),
-                          Text('Clear Cart'),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'reset',
-                      child: Row(
-                        children: [
-                          Icon(Icons.refresh),
-                          SizedBox(width: 8),
-                          Text('Reset Cart'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ],
-            icon: const Icon(Icons.more_vert),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Shopping Cart')),
       body: Obx(() {
         if (controller.isEmpty) {
           return _buildEmptyCart(context);
@@ -173,135 +40,6 @@ class CartView extends GetView<CartController> {
           ],
         );
       }),
-    );
-  }
-
-  void _handleMenuAction(String action, BuildContext context) {
-    switch (action) {
-      case 'export':
-        _exportCart(context);
-        break;
-      case 'import':
-        _importCart(context);
-        break;
-      case 'clear':
-        _showClearCartDialog(context);
-        break;
-      case 'reset':
-        _showResetCartDialog(context);
-        break;
-      case 'force_save':
-        CartController.to.forceSaveCart();
-        Get.snackbar(
-          'Cart Saved',
-          'Cart data force saved to storage',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-          backgroundColor: Get.theme.colorScheme.primaryContainer,
-          colorText: Get.theme.colorScheme.onPrimaryContainer,
-        );
-        break;
-      case 'force_load':
-        CartController.to.forceLoadCart();
-        Get.snackbar(
-          'Cart Loaded',
-          'Cart data force loaded from storage',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-          backgroundColor: Get.theme.colorScheme.primaryContainer,
-          colorText: Get.theme.colorScheme.onPrimaryContainer,
-        );
-        break;
-      case 'refresh_cart':
-        CartController.to.refreshCartFromStorage();
-        Get.snackbar(
-          'Cart Refreshed',
-          'Cart data refreshed from storage',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-          backgroundColor: Get.theme.colorScheme.primaryContainer,
-          colorText: Get.theme.colorScheme.onPrimaryContainer,
-        );
-        break;
-      case 'storage_status':
-        final storageInfo = CartController.to.getStorageInfo();
-        Get.snackbar(
-          'Storage Status',
-          'Initialized: ${storageInfo['isInitialized']}\nType: ${storageInfo['storageType']}\nItems: ${storageInfo['cartItemCount']}',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 3),
-          backgroundColor: Get.theme.colorScheme.primaryContainer,
-          colorText: Get.theme.colorScheme.onPrimaryContainer,
-        );
-        break;
-      case 'test_persistence':
-        CartController.to.testCartPersistence();
-        Get.snackbar(
-          'Persistence Test',
-          'Cart persistence test executed - check logs for details',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-          backgroundColor: Get.theme.colorScheme.secondaryContainer,
-          colorText: Get.theme.colorScheme.onSecondaryContainer,
-        );
-        break;
-    }
-  }
-
-  void _exportCart(BuildContext context) {
-    final cartData = controller.exportCart();
-    final cartJson = cartData.toString();
-
-    // In a real app, you might want to save to file or share
-    Get.snackbar(
-      'Cart Exported',
-      'Cart data exported successfully',
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 2),
-      backgroundColor: Get.theme.colorScheme.primaryContainer,
-      colorText: Get.theme.colorScheme.onPrimaryContainer,
-    );
-
-    // Log the exported data (for demo purposes)
-    Get.log('Exported cart data: $cartJson');
-  }
-
-  void _importCart(BuildContext context) {
-    // In a real app, you would implement file picker or paste functionality
-    Get.snackbar(
-      'Import Cart',
-      'Import functionality would be implemented here',
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 2),
-      backgroundColor: Get.theme.colorScheme.secondaryContainer,
-      colorText: Get.theme.colorScheme.onSecondaryContainer,
-    );
-  }
-
-  void _showResetCartDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Reset Cart'),
-          content: const Text(
-            'This will completely reset your cart and clear all stored data. This action cannot be undone.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                controller.resetCart();
-                Navigator.of(context).pop();
-              },
-              child: const Text('Reset'),
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -416,6 +154,25 @@ class CartView extends GetView<CartController> {
                           ? Theme.of(context).colorScheme.onPrimary
                           : Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Clear Cart Button
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed:
+                  controller.cartItems.isNotEmpty
+                      ? () => _showClearCartDialog(context)
+                      : null,
+              icon: const Icon(Icons.clear_all),
+              label: const Text('Clear Cart'),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                foregroundColor: Theme.of(context).colorScheme.error,
+                side: BorderSide(color: Theme.of(context).colorScheme.error),
               ),
             ),
           ),
