@@ -219,10 +219,6 @@ class CartView extends GetView<CartController> {
               Text(
                 'Total amount: ₹${controller.totalPrice.toStringAsFixed(2)}',
               ),
-              const SizedBox(height: 8),
-              const Text(
-                'This is a demo app. Checkout functionality is not implemented.',
-              ),
             ],
           ),
           actions: [
