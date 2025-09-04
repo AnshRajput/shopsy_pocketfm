@@ -6,13 +6,6 @@ import 'package:flutter/widgets.dart';
 import '../data/models/product.dart';
 import '../data/models/cart_item.dart';
 
-// Mock storage for when SharedPreferences is not available
-class MockStorage {
-  dynamic read(String key) => null;
-  void write(String key, dynamic value) {}
-  void remove(String key) {}
-}
-
 class CartController extends GetxController {
   static CartController get to => Get.find();
 
@@ -347,4 +340,11 @@ class CartController extends GetxController {
     _saveCartToStorage();
     super.onClose();
   }
+}
+
+// Mock storage for when SharedPreferences is not available
+class MockStorage {
+  dynamic read(String key) => null;
+  void write(String key, dynamic value) {}
+  void remove(String key) {}
 }
