@@ -2,6 +2,12 @@
 
 A Flutter-based mobile shopping application with cart management and product browsing functionality.
 
+## Download APK
+
+You can download the latest APK file directly from the repository:
+
+[📱 Download APK](https://github.com/AnshRajput/shopsy_pocketfm/raw/refs/heads/main/spopsy_app_apk/app-release.apk)
+
 ## Technical Stack
 
 - **State Management**: GetX
